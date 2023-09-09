@@ -1,5 +1,8 @@
+using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using Restaurant.Services.ProductAPI;
 using Restaurant.Services.ProductAPI.DbContexts;
+using Restaurant.Services.ProductAPI.Repository;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,6 +16,12 @@ services.AddDbContext<ApplicationDbContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
+
+IMapper mapper = MappingConfig.RegisterMaps().CreateMapper();
+services.AddSingleton(mapper);
+services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
+services.AddScoped<IProductRepository, ProductRepository>();
 
 var app = builder.Build();
 
