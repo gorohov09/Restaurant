@@ -1,8 +1,12 @@
+using Duende.IdentityServer.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Restaurant.Services.Identity;
 using Restaurant.Services.Identity.DbContexts;
+using Restaurant.Services.Identity.Initializer;
 using Restaurant.Services.Identity.Models;
+using Restaurant.Services.Identity.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -29,6 +33,9 @@ var builderIdentityServer = services.AddIdentityServer(options =>
             .AddInMemoryClients(SD.Clients)
             .AddAspNetIdentity<ApplicationUser>();
 
+services.AddScoped<IDbInitializer, DbInitializer>();
+services.AddScoped<IProfileService, ProfileService>();
+
 builderIdentityServer.AddDeveloperSigningCredential();
 
 var app = builder.Build();
@@ -45,8 +52,12 @@ app.UseStaticFiles();
 
 app.UseRouting();
 app.UseIdentityServer();
-
 app.UseAuthorization();
+
+using ServiceProvider serviceProvider = services.BuildServiceProvider();
+using var scope = serviceProvider.CreateScope(); // контекст scope
+var dbInitializer = scope.ServiceProvider.GetService<IDbInitializer>();
+await dbInitializer.Initialize();
 
 app.MapControllerRoute(
     name: "default",

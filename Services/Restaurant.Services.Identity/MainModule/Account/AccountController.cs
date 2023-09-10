@@ -233,7 +233,7 @@ namespace IdentityServerHost.Quickstart.UI
         public async Task<IActionResult> Register(RegisterViewModel model, string returnUrl = null)
         {
             ViewData["ReturnUrl"] = returnUrl;
-            if (ModelState.IsValid)
+            if (ModelState.ErrorCount <= 1)
             {
 
                 var user = new ApplicationUser
@@ -241,8 +241,8 @@ namespace IdentityServerHost.Quickstart.UI
                     UserName = model.Username,
                     Email = model.Email,
                     EmailConfirmed = true,
-                    //FirstName = model.FirstName,
-                    //LastName = model.LastName
+                    FirstName = model.FirstName,
+                    LastName = model.LastName
                 };
 
                 var result = await _userManager.CreateAsync(user, model.Password);

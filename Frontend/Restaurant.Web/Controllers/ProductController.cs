@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Restaurant.Web.Models;
 using Restaurant.Web.Services.IServices;
@@ -18,8 +19,9 @@ namespace Restaurant.Web.Controllers
 
         public async Task<IActionResult> ProductIndex()
         {
+            var accessToken = await HttpContext.GetTokenAsync("access_token");
             var list = new List<ProductDto>();
-            var response = await _productService.GetAllProductsAsync<ResponseDto>();
+            var response = await _productService.GetAllProductsAsync<ResponseDto>(accessToken);
 
             if (response != null && response.IsSuccess)
                 list = JsonConvert.DeserializeObject<List<ProductDto>>(Convert.ToString(response.Result));
@@ -36,9 +38,11 @@ namespace Restaurant.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ProductCreate(ProductDto model)
         {
+            var accessToken = await HttpContext.GetTokenAsync("access_token");
+
             if (ModelState.IsValid)
             {
-                var response = await _productService.CreateProductAsync<ResponseDto>(model);
+                var response = await _productService.CreateProductAsync<ResponseDto>(model, accessToken);
 
                 if (response != null && response.IsSuccess)
                 {
@@ -51,7 +55,9 @@ namespace Restaurant.Web.Controllers
 
         public async Task<IActionResult> ProductEdit(int productId)
         {
-            var response = await _productService.GetProductByIdAsync<ResponseDto>(productId);
+            var accessToken = await HttpContext.GetTokenAsync("access_token");
+
+            var response = await _productService.GetProductByIdAsync<ResponseDto>(productId, accessToken);
 
             if (response != null && response.IsSuccess)
             {
@@ -66,9 +72,11 @@ namespace Restaurant.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ProductEdit(ProductDto model)
         {
+            var accessToken = await HttpContext.GetTokenAsync("access_token");
+
             if (ModelState.IsValid)
             {
-                var response = await _productService.UpdateProductAsync<ResponseDto>(model);
+                var response = await _productService.UpdateProductAsync<ResponseDto>(model, accessToken);
 
                 if (response != null && response.IsSuccess)
                 {
@@ -81,7 +89,9 @@ namespace Restaurant.Web.Controllers
 
         public async Task<IActionResult> ProductDelete(int productId)
         {
-            var response = await _productService.DeleteProductAsync<ResponseDto>(productId);
+            var accessToken = await HttpContext.GetTokenAsync("access_token");
+
+            var response = await _productService.DeleteProductAsync<ResponseDto>(productId, accessToken);
 
             if (response != null && response.IsSuccess)
             {
