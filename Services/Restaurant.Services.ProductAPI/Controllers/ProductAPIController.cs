@@ -18,7 +18,6 @@ namespace Restaurant.Services.ProductAPI.Controllers
             _response = new ResponseDto();
         }
 
-        [Authorize]
         [HttpGet]
         public async Task<object> Get()
         {
@@ -36,7 +35,6 @@ namespace Restaurant.Services.ProductAPI.Controllers
             return _response;
         }
 
-        [Authorize]
         [HttpGet("{id}")]
         public async Task<object> Get(int id)
         {
