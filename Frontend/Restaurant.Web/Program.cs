@@ -10,9 +10,12 @@ var services = builder.Services;
 
 services.AddControllersWithViews();
 services.AddHttpClient<IProductService, ProductService>();
+services.AddHttpClient<ICartService, CartService>();
 SD.ProductAPIBase = builder.Configuration["ServiceUrls:ProductAPI"];
+SD.ShoppingCartAPIBase = builder.Configuration["ServiceUrls:ShoppingCartAPI"];
 
 services.AddScoped<IProductService, ProductService>();
+services.AddScoped<ICartService, CartService>();
 
 services.AddAuthentication(options =>
 {

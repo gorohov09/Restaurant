@@ -88,6 +88,8 @@ namespace Restaurant.Services.ShoppingCartAPI.Repository
                 }
                 else
                 {
+                    cartDetail.CartDetailsId = cartDetailsFromDb.CartDetailsId;
+                    cartDetail.CartHeaderId= cartDetailsFromDb.CartHeaderId;
                     cartDetail.Product = null;
                     cartDetail.Count += cartDetailsFromDb.Count;
                     _db.CartDetails.Update(cartDetail);
