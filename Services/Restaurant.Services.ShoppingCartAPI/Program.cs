@@ -4,6 +4,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Restaurant.Services.ShoppingCartAPI;
 using Restaurant.Services.ShoppingCartAPI.DbContexts;
+using Restaurant.Services.ShoppingCartAPI.RabbitMQSender;
 using Restaurant.Services.ShoppingCartAPI.Repository;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -74,6 +75,8 @@ services.AddSingleton(mapper);
 services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 services.AddScoped<ICartRepository, CartRepository>();
+
+services.AddSingleton<IRabbitMQCartMessageSender, RabbitMQCartMessageSender>();
 
 var app = builder.Build();
 

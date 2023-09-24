@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Restaurant.Services.ShoppingCartAPI.Messages;
 using Restaurant.Services.ShoppingCartAPI.Models.Dto;
+using Restaurant.Services.ShoppingCartAPI.RabbitMQSender;
 using Restaurant.Services.ShoppingCartAPI.Repository;
 
 namespace Restaurant.Services.ShoppingCartAPI.Controllers
@@ -10,11 +11,13 @@ namespace Restaurant.Services.ShoppingCartAPI.Controllers
     public class CartAPIController : Controller
     {
         private readonly ICartRepository _cartRepository;
+        private readonly IRabbitMQCartMessageSender _rabbitMessageSender;
         protected ResponseDto _response;
 
-        public CartAPIController(ICartRepository cartRepository)
+        public CartAPIController(ICartRepository cartRepository, IRabbitMQCartMessageSender rabbitMessageSender)
         {
             _cartRepository = cartRepository;
+            _rabbitMessageSender = rabbitMessageSender;
             _response = new ResponseDto();
         }
 
@@ -118,6 +121,10 @@ namespace Restaurant.Services.ShoppingCartAPI.Controllers
         [HttpPost("Checkout")]
         public async Task<object> Checkout(CheckoutHeaderDto checkoutHeader)
         {
+            /* Логика здесь следующая: ShoppinCartAPI получает информацию о заказе + актуальную корзину пользователя
+             * И отправляет это сообщение в сервис заказов - OrderAPI. Отправка происходит через брокер сообщений.
+             */
+
             try
             {
                 var cartDto = await _cartRepository.GetCartByUserId(checkoutHeader.UserId);
@@ -128,6 +135,7 @@ namespace Restaurant.Services.ShoppingCartAPI.Controllers
                 checkoutHeader.CartDetails = cartDto.CartDetails;
 
                 //Логика для передачи сообщения в сервис обработки заказа
+                _rabbitMessageSender.SendMessage(checkoutHeader, "checkoutqueue");
             }
             catch (Exception ex)
             {

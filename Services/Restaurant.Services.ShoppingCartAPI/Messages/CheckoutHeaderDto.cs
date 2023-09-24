@@ -1,11 +1,12 @@
-﻿using Restaurant.Services.ShoppingCartAPI.Models.Dto;
+﻿using Restaurant.MessageBus;
+using Restaurant.Services.ShoppingCartAPI.Models.Dto;
 
 namespace Restaurant.Services.ShoppingCartAPI.Messages
 {
     /// <summary>
     /// Сообщение, которое будет передаваться, через шину сообщений в другой микросервис
     /// </summary>
-    public class CheckoutHeaderDto
+    public class CheckoutHeaderDto : BaseMessage
     {
         public int CartHeaderId { get; set; }
         public string UserId { get; set; }
