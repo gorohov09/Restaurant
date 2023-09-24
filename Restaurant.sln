@@ -21,6 +21,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Integration", "Integration"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Restaurant.MessageBus", "Integration\Restaurant.MessageBus\Restaurant.MessageBus.csproj", "{5AF81D10-5C10-4E38-A6ED-64281701FF61}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Restaurant.Services.OrderAPI", "Services\Restaurant.Services.OrderAPI\Restaurant.Services.OrderAPI.csproj", "{14EECDEA-C5A2-4F78-8E7D-595D52693183}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,6 +53,10 @@ Global
 		{5AF81D10-5C10-4E38-A6ED-64281701FF61}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5AF81D10-5C10-4E38-A6ED-64281701FF61}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5AF81D10-5C10-4E38-A6ED-64281701FF61}.Release|Any CPU.Build.0 = Release|Any CPU
+		{14EECDEA-C5A2-4F78-8E7D-595D52693183}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{14EECDEA-C5A2-4F78-8E7D-595D52693183}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{14EECDEA-C5A2-4F78-8E7D-595D52693183}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{14EECDEA-C5A2-4F78-8E7D-595D52693183}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -62,6 +68,7 @@ Global
 		{58ED5F2B-1BF1-43D6-8BE3-F5C485276AC0} = {67CE8A8F-BC9A-46A9-830C-D3CF794EDF68}
 		{89EE3829-00E6-4DCF-9803-F8A021408AD6} = {67CE8A8F-BC9A-46A9-830C-D3CF794EDF68}
 		{5AF81D10-5C10-4E38-A6ED-64281701FF61} = {AF1E4298-2925-41A4-B479-4699D18DD1EB}
+		{14EECDEA-C5A2-4F78-8E7D-595D52693183} = {67CE8A8F-BC9A-46A9-830C-D3CF794EDF68}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {3F9542CD-0A81-4695-AA33-51A613A8A6D9}
