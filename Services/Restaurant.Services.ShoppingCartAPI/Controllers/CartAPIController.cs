@@ -11,14 +11,19 @@ namespace Restaurant.Services.ShoppingCartAPI.Controllers
     public class CartAPIController : Controller
     {
         private readonly ICartRepository _cartRepository;
+        private readonly ICouponRepository _couponRepository;
         private readonly IRabbitMQCartMessageSender _rabbitMessageSender;
         protected ResponseDto _response;
 
-        public CartAPIController(ICartRepository cartRepository, IRabbitMQCartMessageSender rabbitMessageSender)
+        public CartAPIController(
+            ICartRepository cartRepository,
+            ICouponRepository couponRepository,
+            IRabbitMQCartMessageSender rabbitMessageSender)
         {
             _cartRepository = cartRepository;
             _rabbitMessageSender = rabbitMessageSender;
             _response = new ResponseDto();
+            _couponRepository = couponRepository;
         }
 
         [HttpGet("GetCart/{userId}")]
@@ -133,6 +138,21 @@ namespace Restaurant.Services.ShoppingCartAPI.Controllers
                     return BadRequest();
                 }
                 checkoutHeader.CartDetails = cartDto.CartDetails;
+
+                //Проверим, а действует ли скидка(Возможно купон был изменен).
+                //Для этого нам необходимо обратиться в сервис купонов. И обращение это будет синхронным
+                if (!string.IsNullOrEmpty(checkoutHeader.CouponCode))
+                {
+                    var coupon = await _couponRepository.GetCoupon(checkoutHeader.CouponCode);
+
+                    if (coupon.DiscountAmount != checkoutHeader.DiscountTotal)
+                    {
+                        _response.IsSuccess = false;
+                        _response.ErrorMessages = new List<string>() { "Купон изменился" };
+                        _response.DisplayMessage = "Купон изменился";
+                        return _response;
+                    }
+                }
 
                 //Логика для передачи сообщения в сервис обработки заказа
                 _rabbitMessageSender.SendMessage(checkoutHeader, "checkoutqueue");

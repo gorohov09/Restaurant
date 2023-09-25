@@ -75,8 +75,14 @@ services.AddSingleton(mapper);
 services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 services.AddScoped<ICartRepository, CartRepository>();
+services.AddScoped<ICouponRepository, CouponRepository>();
 
 services.AddSingleton<IRabbitMQCartMessageSender, RabbitMQCartMessageSender>();
+
+services.AddHttpClient<ICouponRepository, CouponRepository>(x =>
+{
+    x.BaseAddress = new Uri(builder.Configuration["ServiceUrls:CouponAPI"]);
+});
 
 var app = builder.Build();
 
