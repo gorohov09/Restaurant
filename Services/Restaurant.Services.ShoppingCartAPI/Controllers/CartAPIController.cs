@@ -156,6 +156,9 @@ namespace Restaurant.Services.ShoppingCartAPI.Controllers
 
                 //Логика для передачи сообщения в сервис обработки заказа
                 _rabbitMessageSender.SendMessage(checkoutHeader, "checkoutqueue");
+
+                //Очистка корзины
+                await _cartRepository.ClearCart(checkoutHeader.UserId);
             }
             catch (Exception ex)
             {

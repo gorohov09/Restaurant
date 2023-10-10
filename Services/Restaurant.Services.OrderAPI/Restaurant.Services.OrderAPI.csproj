@@ -26,4 +26,8 @@
     <Folder Include="Controllers\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\Integration\Restaurant.MessageBus\Restaurant.MessageBus.csproj" />
+  </ItemGroup>
+
 </Project>

@@ -5,6 +5,7 @@ using Microsoft.OpenApi.Models;
 using Restaurant.Services.OrderAPI;
 using Restaurant.Services.OrderAPI.DbContexts;
 using Restaurant.Services.OrderAPI.Messaging;
+using Restaurant.Services.OrderAPI.RabbitMQSender;
 using Restaurant.Services.OrderAPI.Repository;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -80,7 +81,10 @@ var optionBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
 optionBuilder.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 services.AddSingleton<IOrderRepository>(new OrderRepository(optionBuilder.Options));
 
+services.AddSingleton<IRabbitMQOrderMessageSender, RabbitMQOrderMessageSender>();
+
 services.AddHostedService<RabbitMQCheckoutConsumer>();
+services.AddHostedService<RabbitMQPaymentConsumer>();
 
 
 var app = builder.Build();

@@ -5,18 +5,22 @@ using Restaurant.Services.OrderAPI.Repository;
 using System.Text;
 using Newtonsoft.Json;
 using Restaurant.Services.OrderAPI.Messages;
+using Restaurant.Services.OrderAPI.RabbitMQSender;
 
 namespace Restaurant.Services.OrderAPI.Messaging
 {
     public class RabbitMQCheckoutConsumer : BackgroundService
     {
         private readonly IOrderRepository _orderRepository;
+        private readonly IRabbitMQOrderMessageSender _rabbitMQOrderMessageSender;
         private IConnection _connection;
         private IModel _channel;
 
-        public RabbitMQCheckoutConsumer(IOrderRepository orderRepository)
+        public RabbitMQCheckoutConsumer(IOrderRepository orderRepository, IRabbitMQOrderMessageSender rabbitMQOrderMessageSender)
         {
             _orderRepository = orderRepository;
+            _rabbitMQOrderMessageSender = rabbitMQOrderMessageSender;
+
             var factory = new ConnectionFactory
             {
                 HostName = "localhost",
@@ -82,7 +86,29 @@ namespace Restaurant.Services.OrderAPI.Messaging
                 orderHeader.OrderDetails.Add(orderDetails);
             }
 
-            await _orderRepository.AddOrder(orderHeader);
+            var result = await _orderRepository.AddOrder(orderHeader);
+            if (result)
+            {
+                var paymentRequestMessage = new PaymentRequestMessage()
+                {
+                    Name = orderHeader.FirstName + " " + orderHeader.LastName,
+                    CardNumber = orderHeader.CardNumber,
+                    CVV = orderHeader.CVV,
+                    ExpiryMonthYear = orderHeader.ExpiryMonthYear,
+                    OrderId = orderHeader.OrderHeaderId,
+                    OrderTotal = orderHeader.OrderTotal
+                };
+
+                try
+                {
+                    _rabbitMQOrderMessageSender.SendMessage(paymentRequestMessage, "orderpaymentprocesstopic");
+                }
+                catch (Exception e)
+                {
+                    //Регистрация исключения, записывание в логи и т.д.
+                    throw e;
+                }
+            }
         }
     }
 }
