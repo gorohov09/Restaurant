@@ -19,15 +19,25 @@ namespace Restaurant.Services.PaymentAPI.RabbitMQSender
             _username = "rmuser";
         }
 
-        public void SendMessage(BaseMessage message, string queueName)
+        public void SendMessage(BaseMessage message, string exchangeName)
         {
             if (ConnectionExists())
             {
                 using var channel = _connection.CreateModel();
-                channel.QueueDeclare(queue: queueName, false, false, false, arguments: null);
+
+                #region У нас Consumer-ы будут деклрировать все сущности
+                //////Объявление Exchange
+                //channel.ExchangeDeclare(exchange: exchangeName, type: ExchangeType.Fanout);
+
+                //////Объявление очереди
+                //channel.QueueDeclare(queue: "orderstatusqueue", false, false, false, arguments: null);
+                //channel.QueueDeclare(queue: "emailqueue", false, false, false, arguments: null);
+                #endregion
+
                 var json = JsonConvert.SerializeObject(message);
                 var body = Encoding.UTF8.GetBytes(json);
-                channel.BasicPublish(exchange: "", routingKey: queueName, basicProperties: null, body: body);
+
+                channel.BasicPublish(exchange: exchangeName, routingKey: string.Empty, basicProperties: null, body: body);
             }
         }
 

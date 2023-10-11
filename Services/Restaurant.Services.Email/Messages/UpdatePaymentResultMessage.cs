@@ -1,4 +1,4 @@
-﻿namespace Restaurant.Services.OrderAPI.Messages
+﻿namespace Restaurant.Services.Email.Messages
 {
     public class UpdatePaymentResultMessage
     {

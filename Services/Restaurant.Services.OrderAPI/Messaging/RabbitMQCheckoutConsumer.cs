@@ -96,12 +96,13 @@ namespace Restaurant.Services.OrderAPI.Messaging
                     CVV = orderHeader.CVV,
                     ExpiryMonthYear = orderHeader.ExpiryMonthYear,
                     OrderId = orderHeader.OrderHeaderId,
-                    OrderTotal = orderHeader.OrderTotal
+                    OrderTotal = orderHeader.OrderTotal,
+                    Email = orderHeader.Email,
                 };
 
                 try
                 {
-                    _rabbitMQOrderMessageSender.SendMessage(paymentRequestMessage, "orderpaymentprocesstopic");
+                    _rabbitMQOrderMessageSender.SendMessage(paymentRequestMessage, "orderpaymentprocessqueue");
                 }
                 catch (Exception e)
                 {

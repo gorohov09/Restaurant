@@ -30,7 +30,7 @@ namespace Restaurant.Services.PaymentAPI.Messaging
 
             _connection = factory.CreateConnection();
             _channel = _connection.CreateModel();
-            _channel.QueueDeclare(queue: "orderpaymentprocesstopic", false, false, false, arguments: null);
+            _channel.QueueDeclare(queue: "orderpaymentprocessqueue", false, false, false, arguments: null);
         }
         protected override Task ExecuteAsync(CancellationToken stoppingToken)
         {
@@ -46,7 +46,7 @@ namespace Restaurant.Services.PaymentAPI.Messaging
                 _channel.BasicAck(ea.DeliveryTag, false);
             };
 
-            _channel.BasicConsume("orderpaymentprocesstopic", false, consumer);
+            _channel.BasicConsume("orderpaymentprocessqueue", false, consumer);
 
             return Task.CompletedTask;
         }
@@ -58,12 +58,18 @@ namespace Restaurant.Services.PaymentAPI.Messaging
             var updatePaymentResultMessage = new UpdatePaymentResultMessage
             {
                 OrderId = paymentRequestMessage.OrderId,
-                Status = result
+                Status = result,
+                Email = paymentRequestMessage.Email,
             };
 
             try
             {
-                _rabbitMQPaymentMessageSender.SendMessage(updatePaymentResultMessage, "paymentqueue");
+                /* Сообщение публикуем в Exchange, откудо оно попадает в 2 микросервиса 
+                 * 1 - OrderAPI для установки нового статуса заказа
+                 * 2 - Email для отправки уведомления по почте, что оплата успешна
+                 * 
+                 */
+                _rabbitMQPaymentMessageSender.SendMessage(updatePaymentResultMessage, "paymentexchange");
             }
             catch (Exception ex)
             {
