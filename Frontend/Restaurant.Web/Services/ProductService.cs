@@ -35,7 +35,7 @@ namespace Restaurant.Web.Services
             return await SendAsync<T>(new ApiRequest
             {
                 ApiType = SD.ApiType.GET,
-                Url = SD.ProductAPIBase + "api/products/",
+                Url = SD.ProductAPIBase + "api/products",
                 AccessToken = token
             });
         }
