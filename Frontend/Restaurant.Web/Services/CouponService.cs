@@ -16,7 +16,7 @@ namespace Restaurant.Web.Services
             return await this.SendAsync<T>(new ApiRequest()
             {
                 ApiType = SD.ApiType.GET,
-                Url = SD.CouponAPIBase + "/api/coupon/GetCoupon/" + couponCode,
+                Url = SD.CouponAPIBase + "api/coupon/GetCoupon/" + couponCode,
                 AccessToken = token
             });
         }

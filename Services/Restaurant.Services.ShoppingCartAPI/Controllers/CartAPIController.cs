@@ -3,6 +3,7 @@ using Restaurant.Services.ShoppingCartAPI.Messages;
 using Restaurant.Services.ShoppingCartAPI.Models.Dto;
 using Restaurant.Services.ShoppingCartAPI.RabbitMQSender;
 using Restaurant.Services.ShoppingCartAPI.Repository;
+using System.Security.Claims;
 
 namespace Restaurant.Services.ShoppingCartAPI.Controllers
 {
@@ -45,6 +46,8 @@ namespace Restaurant.Services.ShoppingCartAPI.Controllers
         [HttpPost("AddCart")]
         public async Task<object> AddCart([FromBody] CartDto cartDto)
         {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
             try
             {
                 CartDto cartDt = await _cartRepository.CreateUpdateCart(cartDto);
