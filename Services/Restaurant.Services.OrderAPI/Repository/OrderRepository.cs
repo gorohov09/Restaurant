@@ -21,6 +21,15 @@ namespace Restaurant.Services.OrderAPI.Repository
             return true;
         }
 
+        public async Task<List<OrderHeader>> GetAllOrdersByUser(string userId)
+        {
+            await using var _db = new ApplicationDbContext(_dbContext);
+            return await _db.OrderHeaders
+                .Include(o => o.OrderDetails)
+                .Where(o => o.UserId == userId)
+                .ToListAsync();
+        }
+
         public async Task UpdateOrderPaymentStatus(int orderHeaderId, bool paid)
         {
             await using var _db = new ApplicationDbContext(_dbContext);

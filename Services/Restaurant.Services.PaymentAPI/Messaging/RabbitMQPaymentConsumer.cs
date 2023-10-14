@@ -54,6 +54,7 @@ namespace Restaurant.Services.PaymentAPI.Messaging
         private async Task HandleMessage(PaymentRequestMessage paymentRequestMessage)
         {
             var result = _paymentProcessor.PaymentProccesor();
+            await Task.Delay(60000);
 
             var updatePaymentResultMessage = new UpdatePaymentResultMessage
             {

@@ -1,8 +1,11 @@
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Restaurant.Services.OrderAPI;
+using Restaurant.Services.OrderAPI.Abstractions;
+using Restaurant.Services.OrderAPI.Authentication;
 using Restaurant.Services.OrderAPI.DbContexts;
 using Restaurant.Services.OrderAPI.Messaging;
 using Restaurant.Services.OrderAPI.RabbitMQSender;
@@ -86,6 +89,9 @@ services.AddSingleton<IRabbitMQOrderMessageSender, RabbitMQOrderMessageSender>()
 services.AddHostedService<RabbitMQCheckoutConsumer>();
 services.AddHostedService<RabbitMQPaymentConsumer>();
 
+services.AddHttpContextAccessor();
+services.AddScoped<IUserContext, UserContext>();
+
 
 var app = builder.Build();
 
@@ -97,7 +103,6 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
 app.UseAuthentication();
 app.UseAuthorization();
 

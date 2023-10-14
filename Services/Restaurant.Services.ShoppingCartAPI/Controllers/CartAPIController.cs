@@ -46,8 +46,6 @@ namespace Restaurant.Services.ShoppingCartAPI.Controllers
         [HttpPost("AddCart")]
         public async Task<object> AddCart([FromBody] CartDto cartDto)
         {
-            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-
             try
             {
                 CartDto cartDt = await _cartRepository.CreateUpdateCart(cartDto);

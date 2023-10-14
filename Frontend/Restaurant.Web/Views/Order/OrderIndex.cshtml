@@ -1,0 +1,38 @@
+﻿@model IEnumerable<OrderVm>
+
+<br />
+<br />
+<div class="container p-4 border">
+    <div class="row pb-2">
+        <div class="col">
+            <h1 class="text-primary">Ваши заказы</h1>
+        </div>
+    </div>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Всего товаров</th>
+                <th>Код купона</th>
+                <th>Почта</th>
+                <th>Номер телефона</th>
+                <th>Статус оплаты</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var order in Model)
+            {
+                <tr>
+                    <td>@order.OrderId</td>
+                    <td>@order.CartTotalItems</td>
+                    <td>@order.CouponCode</td>
+                    <td>@order.Email</td>
+                    <td>@order.Phone</td>
+                    <td>@order.PaymentStatus</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

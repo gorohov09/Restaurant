@@ -12,15 +12,18 @@ services.AddControllersWithViews();
 services.AddHttpClient<IProductService, ProductService>();
 services.AddHttpClient<ICartService, CartService>();
 services.AddHttpClient<ICouponService, CouponService>();
+services.AddHttpClient<IOrderService, OrderService>();
 
 SD.ProductAPIBase = builder.Configuration["ServiceUrls:ProductAPI"];
 SD.ShoppingCartAPIBase = builder.Configuration["ServiceUrls:ShoppingCartAPI"];
 SD.CouponAPIBase = builder.Configuration["ServiceUrls:CouponAPI"];
+SD.OrderAPIBase = builder.Configuration["ServiceUrls:OrderAPI"];
 
 services.AddScoped<IProductService, ProductService>();
 services.AddScoped<ICartService, CartService>();
 services.AddScoped<ICartService, CartService>();
 services.AddScoped<ICouponService, CouponService>();
+services.AddScoped<IOrderService, OrderService>();
 
 services.AddAuthentication(options =>
 {

@@ -6,5 +6,6 @@ namespace Restaurant.Services.OrderAPI.Repository
     {
         Task<bool> AddOrder(OrderHeader orderHeader);
         Task UpdateOrderPaymentStatus(int orderHeaderId, bool paid);
+        Task<List<OrderHeader>> GetAllOrdersByUser(string userId);
     }
 }

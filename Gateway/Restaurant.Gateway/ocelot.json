@@ -200,6 +200,25 @@
         "AuthenticationProviderKey": "Bearer",
         "AllowedScopes": [ "restaurant" ]
       }
+    },
+
+    //Order settings
+    {
+      "UpstreamPathTemplate": "/api/order/GetOrdersUser",
+      "UpstreamHttpMethod": [ "GET" ],
+
+      "DownstreamPathTemplate": "/api/order/GetOrdersUser",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7098
+        }
+      ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": [ "restaurant" ]
+      }
     }
 
   ],
