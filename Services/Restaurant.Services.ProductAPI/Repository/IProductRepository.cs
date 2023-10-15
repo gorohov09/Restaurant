@@ -6,6 +6,7 @@ namespace Restaurant.Services.ProductAPI.Repository
     {
         Task<IEnumerable<ProductDto>> GetProducts();
         Task<ProductDto> GetProductById(int productId);
+        Task<FindIdsUndiscoveredProductsDto> FindIdsUndiscoveredProducts(int[] productsIds);
         Task<ProductDto> CreateUpdateProduct(ProductDto productDto);
         Task<bool> DeleteProduct(int productId);
     }

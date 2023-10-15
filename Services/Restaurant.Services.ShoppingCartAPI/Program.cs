@@ -76,12 +76,18 @@ services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 services.AddScoped<ICartRepository, CartRepository>();
 services.AddScoped<ICouponRepository, CouponRepository>();
+services.AddScoped<IProductRepository, ProductRepository>();
 
 services.AddSingleton<IRabbitMQCartMessageSender, RabbitMQCartMessageSender>();
 
 services.AddHttpClient<ICouponRepository, CouponRepository>(x =>
 {
     x.BaseAddress = new Uri(builder.Configuration["ServiceUrls:CouponAPI"]);
+});
+
+services.AddHttpClient<IProductRepository, ProductRepository>(x =>
+{
+    x.BaseAddress = new Uri(builder.Configuration["ServiceUrls:ProductAPI"]);
 });
 
 var app = builder.Build();

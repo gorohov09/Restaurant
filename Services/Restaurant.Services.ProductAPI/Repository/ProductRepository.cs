@@ -50,6 +50,21 @@ namespace Restaurant.Services.ProductAPI.Repository
             }
         }
 
+        public async Task<FindIdsUndiscoveredProductsDto> FindIdsUndiscoveredProducts(int[] productsIds)
+        {
+            var result = new List<int>();
+            foreach (var productId in productsIds)
+            {
+                if (!await _db.Products.AnyAsync(p => p.ProductId == productId))
+                    result.Add(productId);
+            }
+
+            return new FindIdsUndiscoveredProductsDto
+            {
+                ProductsIds = result.ToArray()
+            };
+        }
+
         public async Task<ProductDto> GetProductById(int productId)
         {
             var product = await _db.Products.FirstOrDefaultAsync(p => p.ProductId == productId);

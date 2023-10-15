@@ -53,6 +53,23 @@ namespace Restaurant.Services.ProductAPI.Controllers
             return _response;
         }
 
+        [HttpPost("FindIdsUndiscoveredProducts")]
+        public async Task<object> FindIdsUndiscoveredProducts([FromBody] FindIdsUndiscoveredProductsDto request)
+        {
+            try
+            {
+                var productDto = await _productRepository.FindIdsUndiscoveredProducts(request.ProductsIds);
+                _response.Result = productDto;
+            }
+            catch (Exception ex)
+            {
+                _response.IsSuccess = false;
+                _response.ErrorMessages = new List<string>() { ex.ToString() };
+            }
+
+            return _response;
+        }
+
         [Authorize]
         [HttpPost]
         public async Task<object> Post([FromBody] ProductDto productDto)
